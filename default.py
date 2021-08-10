@@ -1,8 +1,8 @@
 import os
 import shutil
 import sys
-import urllib2
-import urlparse
+import urllib.request
+import urllib.parse
 import xml.etree.ElementTree as ET
 import time
 
@@ -20,7 +20,7 @@ CHANNELS_FILE_NAME = "channels.xml"
 
 __addon__ = "SomaFM"
 __addonid__ = "plugin.audio.somafm"
-__version__ = "1.0.1"
+__version__ = "2.0.0"
 
 __ms_per_day__ = 24 * 60 * 60 * 1000
 
@@ -48,12 +48,11 @@ except:
 
 
 def fetch_remote_channel_data():
-    response = urllib2.urlopen(rootURL + CHANNELS_FILE_NAME)
-    channel_data = response.read()
-    response.close()
-    with open(LOCAL_CHANNELS_FILE_PATH, 'w') as local_channels_xml:
-        local_channels_xml.write(channel_data)
-    return channel_data
+    with urllib.request.urlopen(rootURL + CHANNELS_FILE_NAME) as response:
+        channel_data = response.read()
+        with open(LOCAL_CHANNELS_FILE_PATH, 'w') as local_channels_xml:
+            local_channels_xml.write(channel_data.decode('utf-8'))
+        return channel_data
 
 
 def fetch_local_channel_data():
@@ -63,7 +62,6 @@ def fetch_local_channel_data():
 
 def fetch_cached_channel_data():
     if os.path.getmtime(LOCAL_CHANNELS_FILE_PATH) + cache_ttl_in_ms() > time.time():
-        print "Using cached channel.xml"
         return fetch_local_channel_data()
     # don't delete the cached file so we can still use it as a fallback
     # if something goes wrong fetching the channel data from server
@@ -89,10 +87,13 @@ def build_directory():
         li = xbmcgui.ListItem(
             channel.get_simple_element('title'),
             channel.get_simple_element('description'),
-            channel.geticon(),
-            channel.getthumbnail(),
             plugin_url + channel.getid())
-        li.setArt({"fanart" : xbmc.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)})
+
+        li.setArt({
+            "icon": channel.geticon(),
+            "thumb": channel.getthumbnail(),
+            "fanart": xbmc.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)
+        })
 
         li.setProperty("IsPlayable", "true")
 
@@ -117,7 +118,7 @@ def build_directory():
 def format_priority():
     setting = xbmcplugin.getSetting(handle, "priority_format")
     result = [["mp3"], ["mp3", "aac"], ["aac", "mp3"], ["aac"], ][int(setting)]
-    print "Format setting is %s, using priority %s" % (setting, str(result))
+    print("Format setting is %s, using priority %s" % (setting, str(result)))
     return result
 
 
@@ -125,14 +126,14 @@ def quality_priority():
     setting = xbmcplugin.getSetting(handle, "priority_quality")
     result = [['slowpls', 'fastpls', 'highestpls', ], ['fastpls', 'slowpls', 'highestpls', ],
                 ['fastpls', 'highestpls', 'slowpls', ], ['highestpls', 'fastpls', 'slowpls', ], ][int(setting)]
-    print "Quality setting is %s, using priority %s" % (setting, str(result))
+    print("Quality setting is %s, using priority %s" % (setting, str(result)))
     return result
 
 
 def cache_ttl_in_ms():
     setting = xbmcplugin.getSetting(handle, "cache_ttl")
     result = [0, __ms_per_day__, 7 * __ms_per_day__, 30 * __ms_per_day__][int(setting)]
-    print "Cache setting is %s, using ttl of %dms" % (setting, result)
+    print("Cache setting is %s, using ttl of %dms" % (setting, result))
     return result
 
 
@@ -150,10 +151,14 @@ def play(item_to_play):
 
     list_item = ListItem(channel.get_simple_element('title'),
                          channel.get_simple_element('description'),
-                         channel.geticon(),
-                         channel.getthumbnail(),
                          channel.get_content_url())
-    list_item.setArt({"fanart" : xbmc.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)})
+
+    list_item.setArt({
+        "icon": channel.geticon(),
+        "thumb": channel.getthumbnail(),
+        "fanart": xbmc.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)
+    })
+
     xbmcplugin.setResolvedUrl(handle, True, list_item)
 
 
@@ -170,9 +175,9 @@ if handle == 0:
     if query == "clearcache":
         clearcache()
     else:
-        print query
+        print(query)
 else:
-    path = urlparse.urlparse(plugin_url).path
+    path = urllib.parse.urlparse(plugin_url).path
     item_to_play = os.path.basename(path)
 
     if item_to_play:
