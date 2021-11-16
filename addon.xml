@@ -32,6 +32,40 @@ Overweeg a.u.b. een donatie te doen op https://somafm.com om deze service in lev
         ]]></description>
         <website>https://somafm.com</website>
         <source>https://github.com/Soma-FM-Kodi-Add-On/plugin.audio.somafm</source>
+        <news>
+        Version 2.0.1 - 2021-11-16
+        - Updating details 
+        - Implementing stability measures
+
+        Version 2.0.0 - 2021-11-16
+        - Update to Python3 
+        - Updating to adhere to newish automated testing tool standards
+
+        Version 1.1.0 - 2016-02-22
+        - Remove firewall mode in response to the SomaFM streaming server update
+
+        Version 1.0.2 - 2015-11-08
+        - Dutch translation and some polishing by PanderMusubi - thanks!
+
+        Version 1.0.1 - 2015-01-01
+        - Fix playback on Android client
+
+        Version 1.0.0 - 2014-10-09
+        - Use localized strings, supporting English and German for now
+        - Settings for caching the channel list and clearing the cache
+        - Include a donation reminder ❤️
+
+        Version 0.1.0 - 2014-10-05
+        - Automatically select a stream and instantly start playback when station is selected
+        - Cache playlist files
+        - Settings for quality, format and firewall streams
+
+        Version 0.0.2 - 2013-07-21
+        - Use SomaFM XML API.
+
+        Version 0.0.1 - 2011-03-07
+        - Initial version.
+        </news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
