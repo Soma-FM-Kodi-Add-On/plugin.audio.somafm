@@ -1,3 +1,15 @@
+[B]Version 2.0.1 - 2021-11-16[/B]
+
+- Updating details and implementing stability measures
+
+
+
+[B]Version 2.0.0 - 2021-11-16[/B]
+
+- Update to Python3 and adhere to automated testing tool standards
+
+
+
 [B]Version 1.1.0 - 2016-02-22[/B]
 
 - Remove firewall mode in response to the SomaFM streaming server update
