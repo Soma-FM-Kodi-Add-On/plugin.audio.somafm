@@ -1,8 +1,7 @@
 [tool.poetry]
 name = "plugin.audio.somafm"
-version = "0.1.0"
-description = ""
-authors = ["Malachi Soord <inverse.chi@gmail.com>"]
+version = "2.0.0"
+description = "SomaFM Plugin for Kodi"
 
 [tool.poetry.dependencies]
 python = "^3.9"
