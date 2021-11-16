@@ -1,22 +1,21 @@
 import os
 import random
 import shutil
-import urllib.request
 import urllib.parse
+import urllib.request
 from xml.etree import ElementTree
 
 import xbmc
 from xbmc import PLAYLIST_MUSIC
 
-
-__author__ = 'Oderik'
+__author__ = "Oderik"
 
 
 class Channel(object):
     def prepare_cache(self):
         self.ensure_dir(self.cache_dir)
         if not os.path.exists(self.version_file_path):
-            with open(self.version_file_path, 'w') as version_file:
+            with open(self.version_file_path, "w") as version_file:
                 version_file.write(self.get_simple_element("updated"))
 
     def cleanup_cache(self):
@@ -27,8 +26,14 @@ class Channel(object):
                     version_file.close()
                     shutil.rmtree(self.cache_dir, True)
 
-    def __init__(self, handle, cache_dir, source=ElementTree.Element("channel"), quality_priority=None,
-                 format_priority=None):
+    def __init__(
+        self,
+        handle,
+        cache_dir,
+        source=ElementTree.Element("channel"),
+        quality_priority=None,
+        format_priority=None,
+    ):
         self.handle = handle
         self.source = source
         self.cache_dir = os.path.join(cache_dir, self.getid())
@@ -38,32 +43,38 @@ class Channel(object):
         self.quality_priority = quality_priority
         self.format_priority = format_priority
         if not self.format_priority:
-            self.format_priority = ['mp3', 'aac']
+            self.format_priority = ["mp3", "aac"]
         if not self.quality_priority:
-            self.quality_priority = ['fastpls', 'highestpls', 'slowpls']
+            self.quality_priority = ["fastpls", "highestpls", "slowpls"]
 
     def get_simple_element(self, *tags):
         for tag in tags:
-            element = self.source.find('.//' + tag)
+            element = self.source.find(".//" + tag)
             if element is not None:
                 return element.text
 
     def __repr__(self):
-        return "{}: {} ({}, {})".format(self.__class__.__name__, self.getid(),
-                                            self.quality_priority, self.format_priority)
+        return "{}: {} ({}, {})".format(
+            self.__class__.__name__,
+            self.getid(),
+            self.quality_priority,
+            self.format_priority,
+        )
 
     def get_prioritized_playlists(self):
         playlists = []
         for playlist_tag in self.quality_priority:
             for format in self.format_priority:
                 for playlist_element in self.source.findall(playlist_tag):
-                    format_attrib = playlist_element.attrib['format']
+                    format_attrib = playlist_element.attrib["format"]
                     if format in format_attrib:
-                        playlists.append((playlist_tag, format_attrib, playlist_element.text))
+                        playlists.append(
+                            (playlist_tag, format_attrib, playlist_element.text)
+                        )
         return playlists
 
     def getid(self):
-        return self.source.attrib['id']
+        return self.source.attrib["id"]
 
     def ensure_dir(self, filepath):
         if not os.path.exists(filepath):
@@ -78,7 +89,7 @@ class Channel(object):
             with urllib.request.urlopen(playlist_url) as response:
                 self.prepare_cache()
                 with open(os.path.abspath(filepath), "w") as playlist_file:
-                    playlist_file.write(response.read().decode('utf-8'))
+                    playlist_file.write(response.read().decode("utf-8"))
         return filepath
 
     def get_content_url(self):
@@ -95,8 +106,7 @@ class Channel(object):
                 return random.choice(streams)
 
     def getthumbnail(self):
-        return self.get_simple_element('xlimage', 'largeimage', 'image')
-
+        return self.get_simple_element("xlimage", "largeimage", "image")
 
     def geticon(self):
-        return self.get_simple_element('largeimage', 'xlimage', 'image')
+        return self.get_simple_element("largeimage", "xlimage", "image")
