@@ -170,19 +170,19 @@ def clearcache():
     xbmcgui.Dialog().notification(
         heading, message, xbmcgui.NOTIFICATION_INFO, 1000)
 
-
-if handle == 0:
-    if query == "clearcache":
-        clearcache()
+def run():
+    if handle == 0:
+        if query == "clearcache":
+            clearcache()
+        else:
+            print(query)
     else:
-        print(query)
-else:
-    path = urllib.parse.urlparse(plugin_url).path
-    item_to_play = os.path.basename(path)
+        path = urllib.parse.urlparse(plugin_url).path
+        item_to_play = os.path.basename(path)
 
-    if item_to_play:
-        play(item_to_play)
-    else:
-        build_directory()
+        if item_to_play:
+            play(item_to_play)
+        else:
+            build_directory()
 
-    xbmcplugin.endOfDirectory(handle)
+        xbmcplugin.endOfDirectory(handle)
