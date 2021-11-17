@@ -34,11 +34,11 @@ Overweeg a.u.b. een donatie te doen op https://somafm.com om deze service in lev
         <source>https://github.com/Soma-FM-Kodi-Add-On/plugin.audio.somafm</source>
         <news>
         Version 2.0.1 - 2021-11-16
-        - Updating details 
+        - Updating details
         - Implementing stability measures
 
         Version 2.0.0 - 2021-11-16
-        - Update to Python3 
+        - Update to Python3
         - Updating to adhere to newish automated testing tool standards
 
         Version 1.1.0 - 2016-02-22
