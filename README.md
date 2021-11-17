@@ -18,7 +18,7 @@ On Unix based operating systems:
 
 ```bash
 cd ~/kodi/addons/
-git clone https://github.com//Soma-FM-Kodi-Add-On/plugin.audio.somafm.git plugin.audio.somafm
+git clone https://github.com/Soma-FM-Kodi-Add-On/plugin.audio.somafm.git plugin.audio.somafm
 ```
 
 ### ZIP
