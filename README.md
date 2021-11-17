@@ -35,7 +35,7 @@ Unfortunately, installing from a ZIP-file is not a lot easier
 Again on Linux and possibly Mac OSX
 
     wget --content-disposition https://github.com/Oderik/xbmc-somafm/archive/master.zip
-    unzip xbmc-somafm-master.zip 
+    unzip xbmc-somafm-master.zip
     mv xbmc-somafm-master/ plugin.audio.somafm
     mv plugin.audio.somafm/ ~/kodi/addons/
 
