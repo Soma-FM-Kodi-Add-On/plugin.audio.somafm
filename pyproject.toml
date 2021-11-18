@@ -2,6 +2,10 @@
 name = "plugin.audio.somafm"
 version = "2.0.0"
 description = "SomaFM Plugin for Kodi"
+authors = [
+    "Evin Revello <Evin@EvinRevello.com>"
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.9"
