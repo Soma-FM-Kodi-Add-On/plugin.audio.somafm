@@ -1,20 +1,19 @@
 import os
 import shutil
 import sys
-import urllib.request
-import urllib.parse
-import xml.etree.ElementTree as ET
 import time
+import urllib.parse
+import urllib.request
+import xml.etree.ElementTree as ET
 
-from lib.channel import Channel
-import xbmcaddon
-from xbmcgui import ListItem
-import xbmcplugin
-import xbmcgui
 import xbmc
-from xbmcplugin import SORT_METHOD_LISTENERS, SORT_METHOD_UNSORTED, SORT_METHOD_GENRE
+import xbmcaddon
+import xbmcgui
+import xbmcplugin
 import xbmcvfs
-
+from lib.channel import Channel
+from xbmcgui import ListItem
+from xbmcplugin import SORT_METHOD_GENRE, SORT_METHOD_LISTENERS, SORT_METHOD_UNSORTED
 
 CHANNELS_FILE_NAME = "channels.xml"
 
@@ -50,8 +49,8 @@ except:
 def fetch_remote_channel_data():
     with urllib.request.urlopen(rootURL + CHANNELS_FILE_NAME) as response:
         channel_data = response.read()
-        with open(LOCAL_CHANNELS_FILE_PATH, 'w') as local_channels_xml:
-            local_channels_xml.write(channel_data.decode('utf-8'))
+        with open(LOCAL_CHANNELS_FILE_PATH, "w") as local_channels_xml:
+            local_channels_xml.write(channel_data.decode("utf-8"))
         return channel_data
 
 
@@ -78,30 +77,39 @@ def fetch_channel_data(*strategies):
 
 
 def build_directory():
-    channel_data = fetch_channel_data(fetch_cached_channel_data, fetch_remote_channel_data, fetch_local_channel_data)
+    channel_data = fetch_channel_data(
+        fetch_cached_channel_data, fetch_remote_channel_data, fetch_local_channel_data
+    )
     xml_data = ET.fromstring(channel_data)
 
     stations = xml_data.findall(".//channel")
     for station in stations:
         channel = Channel(handle, tempdir, station)
         li = xbmcgui.ListItem(
-            channel.get_simple_element('title'),
-            channel.get_simple_element('description'),
-            plugin_url + channel.getid())
+            channel.get_simple_element("title"),
+            channel.get_simple_element("description"),
+            plugin_url + channel.getid(),
+        )
 
-        li.setArt({
-            "icon": channel.geticon(),
-            "thumb": channel.getthumbnail(),
-            "fanart": xbmcvfs.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)
-        })
+        li.setArt(
+            {
+                "icon": channel.geticon(),
+                "thumb": channel.getthumbnail(),
+                "fanart": xbmcvfs.translatePath(
+                    "special://home/addons/%s/fanart.jpg" % __addonid__
+                ),
+            }
+        )
 
         li.setProperty("IsPlayable", "true")
 
-        for element, info in [('listeners', 'listeners'),
-                              ('genre', 'genre'),
-                              ('dj', 'artist'),
-                              ('description', 'comment'),
-                              ('title', 'title')]:
+        for element, info in [
+            ("listeners", "listeners"),
+            ("genre", "genre"),
+            ("dj", "artist"),
+            ("description", "comment"),
+            ("title", "title"),
+        ]:
             value = channel.get_simple_element(element)
             li.setInfo("Music", {info: value})
 
@@ -109,7 +117,8 @@ def build_directory():
             handle=handle,
             url=plugin_url + channel.getid(),
             listitem=li,
-            totalItems=len(stations))
+            totalItems=len(stations),
+        )
     xbmcplugin.addSortMethod(handle, SORT_METHOD_UNSORTED)
     xbmcplugin.addSortMethod(handle, SORT_METHOD_LISTENERS)
     xbmcplugin.addSortMethod(handle, SORT_METHOD_GENRE)
@@ -117,15 +126,40 @@ def build_directory():
 
 def format_priority():
     setting = xbmcplugin.getSetting(handle, "priority_format")
-    result = [["mp3"], ["mp3", "aac"], ["aac", "mp3"], ["aac"], ][int(setting)]
+    result = [
+        ["mp3"],
+        ["mp3", "aac"],
+        ["aac", "mp3"],
+        ["aac"],
+    ][int(setting)]
     print("Format setting is %s, using priority %s" % (setting, str(result)))
     return result
 
 
 def quality_priority():
     setting = xbmcplugin.getSetting(handle, "priority_quality")
-    result = [['slowpls', 'fastpls', 'highestpls', ], ['fastpls', 'slowpls', 'highestpls', ],
-                ['fastpls', 'highestpls', 'slowpls', ], ['highestpls', 'fastpls', 'slowpls', ], ][int(setting)]
+    result = [
+        [
+            "slowpls",
+            "fastpls",
+            "highestpls",
+        ],
+        [
+            "fastpls",
+            "slowpls",
+            "highestpls",
+        ],
+        [
+            "fastpls",
+            "highestpls",
+            "slowpls",
+        ],
+        [
+            "highestpls",
+            "fastpls",
+            "slowpls",
+        ],
+    ][int(setting)]
     print("Quality setting is %s, using priority %s" % (setting, str(result)))
     return result
 
@@ -138,26 +172,38 @@ def cache_ttl_in_ms():
 
 
 def play(item_to_play):
-    channel_data = fetch_channel_data(fetch_local_channel_data, fetch_remote_channel_data)
+    channel_data = fetch_channel_data(
+        fetch_local_channel_data, fetch_remote_channel_data
+    )
     xml_data = ET.fromstring(channel_data)
     try:
         channel_data = xml_data.find(".//channel[@id='" + item_to_play + "']")
-        channel = Channel(handle, tempdir, channel_data, quality_priority(), format_priority())
+        channel = Channel(
+            handle, tempdir, channel_data, quality_priority(), format_priority()
+        )
     except:
         for element in xml_data.findall(".//channel"):
-            channel = Channel(handle, tempdir, element, quality_priority(), format_priority())
+            channel = Channel(
+                handle, tempdir, element, quality_priority(), format_priority()
+            )
             if channel.getid() == item_to_play:
                 break
 
-    list_item = ListItem(channel.get_simple_element('title'),
-                         channel.get_simple_element('description'),
-                         channel.get_content_url())
+    list_item = ListItem(
+        channel.get_simple_element("title"),
+        channel.get_simple_element("description"),
+        channel.get_content_url(),
+    )
 
-    list_item.setArt({
-        "icon": channel.geticon(),
-        "thumb": channel.getthumbnail(),
-        "fanart": xbmcvfs.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)
-    })
+    list_item.setArt(
+        {
+            "icon": channel.geticon(),
+            "thumb": channel.getthumbnail(),
+            "fanart": xbmcvfs.translatePath(
+                "special://home/addons/%s/fanart.jpg" % __addonid__
+            ),
+        }
+    )
 
     xbmcplugin.setResolvedUrl(handle, True, list_item)
 
@@ -167,8 +213,8 @@ def clearcache():
     addon = xbmcaddon.Addon(id=__addonid__)
     heading = addon.getLocalizedString(32004)
     message = addon.getLocalizedString(32005)
-    xbmcgui.Dialog().notification(
-        heading, message, xbmcgui.NOTIFICATION_INFO, 1000)
+    xbmcgui.Dialog().notification(heading, message, xbmcgui.NOTIFICATION_INFO, 1000)
+
 
 def run():
     if handle == 0:
@@ -186,4 +232,3 @@ def run():
             build_directory()
 
         xbmcplugin.endOfDirectory(handle)
-        
