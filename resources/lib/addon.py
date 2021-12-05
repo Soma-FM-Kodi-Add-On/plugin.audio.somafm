@@ -11,9 +11,10 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 import xbmcvfs
-from lib.channel import Channel
 from xbmcgui import ListItem
 from xbmcplugin import SORT_METHOD_GENRE, SORT_METHOD_LISTENERS, SORT_METHOD_UNSORTED
+
+from resources.lib.channel import Channel
 
 CHANNELS_FILE_NAME = "channels.xml"
 
