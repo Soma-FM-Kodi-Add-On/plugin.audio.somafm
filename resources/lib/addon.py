@@ -32,7 +32,7 @@ def log(msg):
 log(sys.argv)
 
 rootURL = "https://somafm.com/"
-tempdir = xbmc.translatePath("special://home/userdata/addon_data/%s" % __addonid__)
+tempdir = xbmcvfs.translatePath("special://home/userdata/addon_data/%s" % __addonid__)
 xbmcvfs.mkdirs(tempdir)
 
 LOCAL_CHANNELS_FILE_PATH = os.path.join(tempdir, CHANNELS_FILE_NAME)
@@ -92,7 +92,7 @@ def build_directory():
         li.setArt({
             "icon": channel.geticon(),
             "thumb": channel.getthumbnail(),
-            "fanart": xbmc.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)
+            "fanart": xbmcvfs.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)
         })
 
         li.setProperty("IsPlayable", "true")
@@ -156,7 +156,7 @@ def play(item_to_play):
     list_item.setArt({
         "icon": channel.geticon(),
         "thumb": channel.getthumbnail(),
-        "fanart": xbmc.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)
+        "fanart": xbmcvfs.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)
     })
 
     xbmcplugin.setResolvedUrl(handle, True, list_item)
