@@ -14,7 +14,7 @@ import xbmcvfs
 from xbmcgui import ListItem
 from xbmcplugin import SORT_METHOD_GENRE, SORT_METHOD_LISTENERS, SORT_METHOD_UNSORTED
 
-from lib.channel import Channel
+from resources.lib.channel import Channel
 
 CHANNELS_FILE_NAME = "channels.xml"
 
@@ -32,7 +32,7 @@ def log(msg):
 log(sys.argv)
 
 rootURL = "https://somafm.com/"
-tempdir = xbmc.translatePath("special://home/userdata/addon_data/%s" % __addonid__)
+tempdir = xbmcvfs.translatePath("special://home/userdata/addon_data/%s" % __addonid__)
 xbmcvfs.mkdirs(tempdir)
 
 LOCAL_CHANNELS_FILE_PATH = os.path.join(tempdir, CHANNELS_FILE_NAME)
@@ -96,7 +96,7 @@ def build_directory():
             {
                 "icon": channel.geticon(),
                 "thumb": channel.getthumbnail(),
-                "fanart": xbmc.translatePath(
+                "fanart": xbmcvfs.translatePath(
                     "special://home/addons/%s/fanart.jpg" % __addonid__
                 ),
             }
@@ -200,7 +200,7 @@ def play(item_to_play):
         {
             "icon": channel.geticon(),
             "thumb": channel.getthumbnail(),
-            "fanart": xbmc.translatePath(
+            "fanart": xbmcvfs.translatePath(
                 "special://home/addons/%s/fanart.jpg" % __addonid__
             ),
         }
