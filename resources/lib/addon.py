@@ -42,7 +42,7 @@ try:
     handle = int(sys.argv[1])
     query = sys.argv[2]
 except Exception as e:
-    xbmc.log("Initialization Failed: " + str(e), level=xbmc.LOGERROR)
+    xbmc.log(f"Initialization Failed: {e}", level=xbmc.LOGERROR)
     plugin_url = "plugin://" + __addonid__
     handle = 0
     query = ""
@@ -75,7 +75,7 @@ def fetch_channel_data(*strategies):
             if result is not None:
                 return result
         except Exception as e:
-            xbmc.log("fetch_channel_data Failed: " + str(e), level=xbmc.LOGERROR)
+            xbmc.log(f"fetch_channel_data Failed: {e}", level=xbmc.LOGERROR)
             pass
 
 
@@ -135,7 +135,9 @@ def format_priority():
         ["aac", "mp3"],
         ["aac"],
     ][int(setting)]
-    print("Format setting is %s, using priority %s" % (setting, str(result)))
+    xbmc.log(
+        f"Format setting is {setting}, using priority {result}", level=xbmc.LOGDEBUG
+    )
     return result
 
 
@@ -163,14 +165,16 @@ def quality_priority():
             "slowpls",
         ],
     ][int(setting)]
-    print("Quality setting is %s, using priority %s" % (setting, str(result)))
+    xbmc.log(
+        f"Quality setting is {setting}, using priority {result}", level=xbmc.LOGDEBUG
+    )
     return result
 
 
 def cache_ttl_in_ms():
     setting = xbmcplugin.getSetting(handle, "cache_ttl")
     result = [0, __ms_per_day__, 7 * __ms_per_day__, 30 * __ms_per_day__][int(setting)]
-    print("Cache setting is %s, using ttl of %dms" % (setting, result))
+    xbmc.log(f"Cache setting is {setting}, using ttl of {result}", level=xbmc.LOGDEBUG)
     return result
 
 
@@ -185,7 +189,7 @@ def play(item_to_play):
             handle, tempdir, channel_data, quality_priority(), format_priority()
         )
     except Exception as e:
-        xbmc.log("play Failed: " + str(e), level=xbmc.LOGERROR)
+        xbmc.log(f"play Failed: " + {e}, level=xbmc.LOGERROR)
         for element in xml_data.findall(".//channel"):
             channel = Channel(
                 handle, tempdir, element, quality_priority(), format_priority()
@@ -225,7 +229,7 @@ def run():
         if query == "clearcache":
             clearcache()
         else:
-            print(query)
+            xbmc.log(f"Unexpected query supplied: {query}", level=xbmc.LOGDEBUG)
     else:
         path = urllib.parse.urlparse(plugin_url).path
         item_to_play = os.path.basename(path)

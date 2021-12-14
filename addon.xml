@@ -46,7 +46,7 @@
         Version 1.0.0 - 2014-10-09
         - Use localized strings, supporting English and German for now
         - Settings for caching the channel list and clearing the cache
-        - Include a donation reminder ❤️
+        - Include a donation reminder
 
         Version 0.1.0 - 2014-10-05
         - Automatically select a stream and instantly start playback when station is selected
