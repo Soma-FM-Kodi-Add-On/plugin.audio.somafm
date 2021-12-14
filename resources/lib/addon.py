@@ -41,7 +41,8 @@ try:
     plugin_url = sys.argv[0]
     handle = int(sys.argv[1])
     query = sys.argv[2]
-except:
+except Exception as e:
+    xbmc.log("Initialization Failed: " + str(e), level=xbmc.LOGERROR)
     plugin_url = "plugin://" + __addonid__
     handle = 0
     query = ""
@@ -73,7 +74,8 @@ def fetch_channel_data(*strategies):
             result = strategy()
             if result is not None:
                 return result
-        except:
+        except Exception as e:
+            xbmc.log("fetch_channel_data Failed: " + str(e), level=xbmc.LOGERROR)
             pass
 
 
@@ -182,7 +184,8 @@ def play(item_to_play):
         channel = Channel(
             handle, tempdir, channel_data, quality_priority(), format_priority()
         )
-    except:
+    except Exception as e:
+        xbmc.log("play Failed: " + str(e), level=xbmc.LOGERROR)
         for element in xml_data.findall(".//channel"):
             channel = Channel(
                 handle, tempdir, element, quality_priority(), format_priority()
