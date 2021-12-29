@@ -22,7 +22,7 @@ __addon__ = "SomaFM"
 __addonid__ = "plugin.audio.somafm"
 __version__ = "2.0.0"
 
-__ms_per_day__ = 24 * 60 * 60 * 1000
+__seconds_per_day__ = 24 * 60 * 60
 
 
 def log(msg):
@@ -62,7 +62,7 @@ def fetch_local_channel_data():
 
 
 def fetch_cached_channel_data():
-    if os.path.getmtime(LOCAL_CHANNELS_FILE_PATH) + cache_ttl_in_ms() > time.time():
+    if os.path.getmtime(LOCAL_CHANNELS_FILE_PATH) + cache_ttl_in_seconds() > time.time():
         return fetch_local_channel_data()
     # don't delete the cached file so we can still use it as a fallback
     # if something goes wrong fetching the channel data from server
@@ -170,9 +170,9 @@ def quality_priority():
     return result
 
 
-def cache_ttl_in_ms():
+def cache_ttl_in_seconds():
     setting = xbmcplugin.getSetting(handle, "cache_ttl")
-    result = [0, __ms_per_day__, 7 * __ms_per_day__, 30 * __ms_per_day__][int(setting)]
+    result = [0, __seconds_per_day__, 7 * __seconds_per_day__, 30 * __seconds_per_day__][int(setting)]
     xbmc.log(f"Cache setting is {setting}, using ttl of {result}", level=xbmc.LOGDEBUG)
     return result
 
