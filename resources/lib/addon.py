@@ -241,7 +241,7 @@ def clearcache():
         message = addon.getLocalizedString(32005)
         xbmcgui.Dialog().notification(heading, message, xbmcgui.NOTIFICATION_INFO, 1000)
     except Exception as e:
-        xbmc.log(f"Cache failed  to clear: {e}", level=xbmc.LOGERROR)
+        xbmc.log(f"Cache failed to clear: {e}", level=xbmc.LOGERROR)
 
 
 def run():
