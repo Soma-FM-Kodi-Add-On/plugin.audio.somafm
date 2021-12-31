@@ -231,10 +231,10 @@ def clearcache():
         if os.path.isfile(channel_file_path):
             os.remove(channel_file_path)
         # delete all folders
-        for lsItem in os.listdir(tempdir):
-            pathToCheck = tempdir + "/" + lsItem
-            if os.path.isdir(pathToCheck):
-                shutil.rmtree(pathToCheck)
+        for ls_item in os.listdir(tempdir):
+            path_to_check = tempdir + "/" + ls_item
+            if os.path.isdir(path_to_check):
+                shutil.rmtree(path_to_check)
         # display dialog that cache was cleared
         addon = xbmcaddon.Addon(id=__addonid__)
         heading = addon.getLocalizedString(32004)
