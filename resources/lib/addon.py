@@ -62,7 +62,10 @@ def fetch_local_channel_data():
 
 
 def fetch_cached_channel_data():
-    if os.path.getmtime(LOCAL_CHANNELS_FILE_PATH) + cache_ttl_in_seconds() > time.time():
+    if (
+        os.path.getmtime(LOCAL_CHANNELS_FILE_PATH) + cache_ttl_in_seconds()
+        > time.time()
+    ):
         return fetch_local_channel_data()
     # don't delete the cached file so we can still use it as a fallback
     # if something goes wrong fetching the channel data from server
@@ -172,7 +175,12 @@ def quality_priority():
 
 def cache_ttl_in_seconds():
     setting = xbmcplugin.getSetting(handle, "cache_ttl")
-    result = [0, __seconds_per_day__, 7 * __seconds_per_day__, 30 * __seconds_per_day__][int(setting)]
+    result = [
+        0,
+        __seconds_per_day__,
+        7 * __seconds_per_day__,
+        30 * __seconds_per_day__,
+    ][int(setting)]
     xbmc.log(f"Cache setting is {setting}, using ttl of {result}", level=xbmc.LOGDEBUG)
     return result
 
@@ -187,7 +195,8 @@ def play(item_to_play):
         channel = Channel(
             handle, tempdir, channel_data, quality_priority(), format_priority()
         )
-    except:
+    except Exception as e:
+        xbmc.log(f"play({item_to_play}) threw an exception: {e}", level=xbmc.LOGDEBUG)
         for element in xml_data.findall(".//channel"):
             channel = Channel(
                 handle, tempdir, element, quality_priority(), format_priority()
@@ -215,11 +224,24 @@ def play(item_to_play):
 
 
 def clearcache():
-    shutil.rmtree(tempdir, True)
-    addon = xbmcaddon.Addon(id=__addonid__)
-    heading = addon.getLocalizedString(32004)
-    message = addon.getLocalizedString(32005)
-    xbmcgui.Dialog().notification(heading, message, xbmcgui.NOTIFICATION_INFO, 1000)
+    xbmc.log(f"Cache is being cleared", level=xbmc.LOGDEBUG)
+    try:
+        # delete the channels.xml
+        channel_file_path = os.path.join(tempdir, "channels.xml")
+        if os.path.isfile(channel_file_path):
+            os.remove(channel_file_path)
+        # delete all folders
+        for ls_item in os.listdir(tempdir):
+            path_to_check = tempdir + "/" + ls_item
+            if os.path.isdir(path_to_check):
+                shutil.rmtree(path_to_check)
+        # display dialog that cache was cleared
+        addon = xbmcaddon.Addon(id=__addonid__)
+        heading = addon.getLocalizedString(32004)
+        message = addon.getLocalizedString(32005)
+        xbmcgui.Dialog().notification(heading, message, xbmcgui.NOTIFICATION_INFO, 1000)
+    except Exception as e:
+        xbmc.log(f"Cache failed to clear: {e}", level=xbmc.LOGERROR)
 
 
 def run():
