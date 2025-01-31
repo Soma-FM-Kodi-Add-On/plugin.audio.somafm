@@ -224,7 +224,7 @@ def play(item_to_play):
 
 
 def clearcache():
-    xbmc.log(f"Cache is being cleared", level=xbmc.LOGDEBUG)
+    xbmc.log("Cache is being cleared", level=xbmc.LOGDEBUG)
     try:
         # delete the channels.xml
         channel_file_path = os.path.join(tempdir, "channels.xml")
