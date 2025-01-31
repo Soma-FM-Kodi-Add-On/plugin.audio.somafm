@@ -39,6 +39,16 @@ mv xbmc-somafm-master/ plugin.audio.somafm
 mv plugin.audio.somafm/ ~/kodi/addons/
 ```
 
+### Development
+
+Included is a Docker compose stack that mounts the addon in a headless Kodi instance.
+
+```bash
+docker compose up
+```
+
+And navigage to http://localhost:8080
+
 ![SomaFM fanart](fanart.jpg?raw=true)
 
 Lone DJ photo ©2000 Merin McDonell. Used with permission.
