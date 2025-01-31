@@ -1,0 +1,17 @@
+services:
+  kodi-headless:
+    container_name: kodi-headless
+    image: matthuisman/kodi-headless:Omega
+    restart: unless-stopped
+    environment:
+      - PGID=${PGID:-1000} 
+      - PUID=${PUID:-1000} 
+      - TZ=${TZ:-Europe/Berlin} 
+      - KODI_DELAY=${KODI_DELAY:-1}
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+      - "9777:9777/udp"
+    volumes:
+      - .:/config/.kodi/addons/plugin.audio.somafm
+ 
