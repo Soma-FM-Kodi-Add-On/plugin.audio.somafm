@@ -35,7 +35,7 @@ On Unix based operating systems:
 ```bash
 wget --content-disposition https://github.com/Soma-FM-Kodi-Add-On/plugin.audio.somafm/archive/master.zip
 unzip xbmc-somafm-master.zip
-mv xbmc-somafm-master/ plugin.audio.somafm
+mv plugin.audio.somafm-master/ plugin.audio.somafm
 mv plugin.audio.somafm/ ~/kodi/addons/
 ```
 
@@ -47,7 +47,7 @@ Included is a Docker compose stack that mounts the addon in a headless Kodi inst
 docker compose up
 ```
 
-And navigage to http://localhost:8080
+Then navigate to http://localhost:8080 and enable to addon from the settings.
 
 ![SomaFM fanart](fanart.jpg?raw=true)
 
