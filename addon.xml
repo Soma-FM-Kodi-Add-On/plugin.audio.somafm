@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.somafm"
        name="SomaFM"
-       version="2.0.1"
+       version="2.0.2"
        provider-name="Soma-FM-Kodi-Add-On Organization">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -24,6 +24,10 @@
         <website>https://somafm.com</website>
         <source>https://github.com/Soma-FM-Kodi-Add-On/plugin.audio.somafm</source>
         <news>
+         Version 2.0.2 - 2024-02-13
+        - Correct caching time to to be in seconds not ms
+        - Code cleanup
+
          Version 2.0.1 - 2021-12-14
         - Updating details
         - Implementing stability measures
